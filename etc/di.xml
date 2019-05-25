@@ -37,7 +37,11 @@
     </type>
 
     <preference for="ClassyLlama\Credova\Api\Data\ApplicationInfoInterface" type="ClassyLlama\Credova\Model\Data\Application" />
+    <preference for="ClassyLlama\Credova\Api\Data\FederalLicenseInterface" type="ClassyLlama\Credova\Model\Data\FederalLicense" />
+
     <preference for="ClassyLlama\Credova\Api\ApplicationInterface" type="ClassyLlama\Credova\Model\Api\Application" />
+    <preference for="ClassyLlama\Credova\Api\FederalLicenseRepositoryInterface" type="ClassyLlama\Credova\Model\Api\FederalLicenseRepository" />
+
 
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="persist_credova_extension_attributes" type="ClassyLlama\Credova\Plugin\Sales\OrderRepository"/>

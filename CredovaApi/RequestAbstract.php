@@ -24,6 +24,10 @@ abstract class RequestAbstract
      * @var string
      */
     protected $logPrefix;
+    /**
+     * @var array
+     */
+    protected $data = [];
 
     /**
      * RequestAbstract constructor.
@@ -75,9 +79,19 @@ abstract class RequestAbstract
      *
      * @return array
      */
-    protected function getData() : array
+    public function getData() : array
     {
-        return []; // This page intentionally left blank
+        return $this->data;
+    }
+
+    /**
+     * Set request data, if applicable
+     *
+     * @param array $data
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
     }
 
     /**
