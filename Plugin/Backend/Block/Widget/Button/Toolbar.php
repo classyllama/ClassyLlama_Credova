@@ -22,12 +22,14 @@ class Toolbar
         if ($context instanceof \Magento\Sales\Block\Adminhtml\Order\View) {
             // Only take effect for order view block context
 
-            $buttonList->add(
-                'credova-create-federal-license',
-                [
-                    'label' => __('Create Federal License')
-                ]
-            );
+            if ($context->getOrder()->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE) {
+                $buttonList->add(
+                    'credova-create-federal-license',
+                    [
+                        'label' => __('Create Federal License')
+                    ]
+                );
+            }
         }
 
         return [$context, $buttonList];

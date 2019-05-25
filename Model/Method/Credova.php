@@ -14,13 +14,14 @@ use Magento\Payment\Model\InfoInterface;
 class Credova extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const ADDITIONAL_INFO_APPLICATION_ID_KEY = 'credova_application_id';
+    const CODE = 'credova';
 
     /**
      * Payment method code
      *
      * @var string
      */
-    protected $_code = 'credova';
+    protected $_code = self::CODE;
 
     protected $applicationId = null;
 

@@ -1,5 +1,27 @@
 <?php
     /** @var $block \ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\CreateFederalLicense */
+
+    if ($block->getOrder()->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE):
 ?>
 
+    <div class="credova-license-creation-form-wrapper" data-mage-init='{"credovaFederalLicenseCreate": {}}'>
+        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/federallicense/get')) ?>"
+              method="POST" class="credova-license-get-form">
+            <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
 
+            <fieldset class="admin__fieldset">
+                <div class="admin__field">
+                    <div class="admin__field-label">
+                        <label for="license-number">
+                            <span><?= __('License Number') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="license_number" id="license-number" maxlength="20" />
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+<?php endif; ?>
