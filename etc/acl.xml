@@ -3,7 +3,10 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="ClassyLlama_Credova::credova" title="Credova" translate="title" sortOrder="500" />
+                <resource id="ClassyLlama_Credova::credova" title="Credova" translate="title" sortOrder="500">
+                    <resource id="ClassyLlama_Credova::credova_create_federal_license" title="Create Federal License"
+                              translate="title" sortOrder="500" />
+                </resource>
             </resource>
         </resources>
     </acl>

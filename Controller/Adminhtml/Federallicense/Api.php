@@ -24,7 +24,7 @@ class Api extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'ClassyLlama_Credova::credova';
+    const ADMIN_RESOURCE = 'ClassyLlama_Credova::credova_create_federal_license';
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
