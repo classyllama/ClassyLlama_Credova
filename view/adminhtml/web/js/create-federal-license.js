@@ -3,7 +3,8 @@ define([
     'mage/storage',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'mage/backend/notification'
+    'mage/backend/notification',
+    'mage/validation'
 ], function ($, storage) {
     'use strict';
 
@@ -45,6 +46,10 @@ define([
         },
 
         handleSubmit: function() {
+            if (!this.form.valid()) {
+                return;
+            }
+
             if (this.formWrapper.hasClass('create')) {
                 this.doLicenseCreate();
             } else {
@@ -85,6 +90,8 @@ define([
 
         displayCreateFields: function() {
             this.formWrapper.addClass('create');
+
+            this.formWrapper.find('.create-field input').removeProp('disabled');
         },
 
         doLicenseCreate: function() {
