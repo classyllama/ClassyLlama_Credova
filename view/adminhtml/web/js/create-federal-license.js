@@ -2,7 +2,8 @@ define([
     'jquery',
     'mage/storage',
     'Magento_Ui/js/modal/modal',
-    'mage/translate'
+    'mage/translate',
+    'mage/backend/notification'
 ], function ($, storage) {
     'use strict';
 
@@ -72,8 +73,8 @@ define([
                         that.displayCreateFields();
                         break;
                     case 'success':
-                        // License exists -- set on order and close modal.
-                        // TODO: set on order
+                        // License exists and set on order -- close modal.
+                        that.displayMessage('Federal license created.', false);
                         that.formWrapper.modal('closeModal');
                         break;
                 }
@@ -106,17 +107,31 @@ define([
             ).done(function(data) {
                 switch(data.status) {
                     case 'error':
-                        // TODO
+                        that.displayMessage(data.message, true);
                         break;
                     case 'success':
-                        // License created -- set on order and close modal.
-                        // TODO: set on order
+                        // License created and set on order -- close modal.
+                        that.displayMessage('Federal license created.', false);
                         that.formWrapper.modal('closeModal');
                         break;
                 }
             }).always(function() {
                 // TODO: stop spinner
             });
+        },
+
+        displayMessage: function(message, error) {
+            $('body').notification('clear')
+                .notification('add', {
+                    error: error,
+                    message: $.mage.__(message),
+
+                    insertMethod: function (message) {
+                        var $wrapper = $('<div/>').html(message);
+
+                        $('.page-main-actions').after($wrapper);
+                    }
+                });
         }
     });
 
