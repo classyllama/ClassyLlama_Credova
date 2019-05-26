@@ -4,8 +4,9 @@
     if ($block->getOrder()->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE):
 ?>
 
-    <div class="credova-license-creation-form-wrapper" data-mage-init='{"credovaFederalLicenseCreate": {}}'>
-        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/federallicense/get')) ?>"
+    <div class="credova-license-creation-form-wrapper"
+         data-mage-init='{"credovaFederalLicenseCreate": {"orderId":"<?= $block->escapeJs($block->getOrder()->getId()) ?>"}}'>
+        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/federallicense/api')) ?>"
               method="POST" class="credova-license-get-form">
             <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
 
@@ -18,6 +19,77 @@
                     </div>
                     <div class="admin__field-control">
                         <input class="admin__control-text" type="text" name="license_number" id="license-number" maxlength="20" />
+                    </div>
+                </div>
+
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-name">
+                            <span><?= __('License Name') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="license_name" id="license-name" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-expiration">
+                            <span><?= __('Expiration') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="date" name="expiration" id="license-expiration" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-address">
+                            <span><?= __('Address') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="address" id="license-address" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-address2">
+                            <span><?= __('Address 2') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="address_2" id="license-address2" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-city">
+                            <span><?= __('City') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="city" id="license-city" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-state">
+                            <span><?= __('State') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="state" id="license-state" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin__field create-field">
+                    <div class="admin__field-label">
+                        <label for="license-zip">
+                            <span><?= __('Zip') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text" type="text" name="zip" id="license-zip" maxlength="20" />
                     </div>
                 </div>
             </fieldset>

@@ -31,11 +31,11 @@ class CreateFederalLicense extends AuthenticatedRequestAbstract
     public function populateFromLicense(\ClassyLlama\Credova\Api\Data\FederalLicenseInterface $federalLicense)
     {
         $this->setData([
-            'license_number' => $federalLicense->getLicenseNumber(),
-            'licence_name' => $federalLicense->getLicenceName(),
+            'licenseNumber' => $federalLicense->getLicenseNumber(),
+            'licenceName' => $federalLicense->getLicenceName(),
             'expiration' => $federalLicense->getExpiration(),
             'address' => $federalLicense->getAddress(),
-            'address_2' => $federalLicense->getAddress2(),
+            'address2' => $federalLicense->getAddress2(),
             'city' => $federalLicense->getCity(),
             'state' => $federalLicense->getState(),
             'zip' => $federalLicense->getZip(),

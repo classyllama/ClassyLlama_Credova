@@ -3,6 +3,8 @@
 namespace ClassyLlama\Credova\Model\Api;
 
 use ClassyLlama\Credova\Exception\CredovaApiException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 class FederalLicenseRepository implements \ClassyLlama\Credova\Api\FederalLicenseRepositoryInterface
@@ -55,17 +57,51 @@ class FederalLicenseRepository implements \ClassyLlama\Credova\Api\FederalLicens
         /** @var \ClassyLlama\Credova\Api\Data\FederalLicenseInterface $federalLicense */
         $federalLicense = $this->federalLicenseInterfaceFactory->create();
 
-        $federalLicense->setLicenseNumber($responseData['licenseNumber']);
-        $federalLicense->setExpiration($responseData['expiration']);
-        $federalLicense->setAddress($responseData['address']);
-        $federalLicense->setAddress2($responseData['address2']);
-        $federalLicense->setCity($responseData['city']);
-        $federalLicense->setState($responseData['state']);
-        $federalLicense->setZip($responseData['zip']);
-        $federalLicense->setPublicId($responseData['public_id']);
-        $federalLicense->setFilePublicId($responseData['filePublicId']);
+        $federalLicense->setLicenseNumber($responseData['licenseNumber'] ?? '');
+        $federalLicense->setExpiration($responseData['expiration'] ?? '');
+        $federalLicense->setAddress($responseData['address'] ?? '');
+        $federalLicense->setAddress2($responseData['address2'] ?? '');
+        $federalLicense->setCity($responseData['city'] ?? '');
+        $federalLicense->setState($responseData['state'] ?? '');
+        $federalLicense->setZip($responseData['zip'] ?? '');
+        $federalLicense->setPublicId($responseData['publicId'] ?? '');
+        $federalLicense->setFilePublicId($responseData['filePublicId'] ?? '');
 
         return $federalLicense;
+    }
+
+    /**
+     * Validate license required fields
+     *
+     * @param \ClassyLlama\Credova\Api\Data\FederalLicenseInterface $license
+     * @throws LocalizedException
+     */
+    protected function validateLicense(\ClassyLlama\Credova\Api\Data\FederalLicenseInterface $license)
+    {
+        if (empty($license->getLicenseNumber())) {
+            throw new LocalizedException(__('LicenseNumber is a required field.'));
+        }
+
+        if (empty($license->getExpiration())) {
+            throw new LocalizedException(__('Expiration is a required field.'));
+        }
+
+        if (empty($license->getAddress())) {
+            throw new LocalizedException(__('Address is a required field.'));
+        }
+
+        if (empty($license->getCity())) {
+            throw new LocalizedException(__('City is a required field.'));
+        }
+
+        if (empty($license->getState())) {
+            throw new LocalizedException(__('State is a required field.'));
+        }
+
+        if (empty($license->getZip())) {
+            throw new LocalizedException(__('Zip is a required field.'));
+        }
+
     }
 
     /**
@@ -75,6 +111,12 @@ class FederalLicenseRepository implements \ClassyLlama\Credova\Api\FederalLicens
     public function create(\ClassyLlama\Credova\Api\Data\FederalLicenseInterface $federalLicense)
         : \ClassyLlama\Credova\Api\Data\FederalLicenseInterface
     {
+        try {
+            $this->validateLicense($federalLicense);
+        } catch (LocalizedException $e) {
+            throw new CouldNotSaveException(__('Invalid federal license data: %1', $e->getMessage()));
+        }
+
         /** @var \ClassyLlama\Credova\CredovaApi\Authenticated\CreateFederalLicense $createLicenseRequest */
         $createLicenseRequest = $this->createLicenseRequestFactory->create();
 
@@ -85,7 +127,7 @@ class FederalLicenseRepository implements \ClassyLlama\Credova\Api\FederalLicens
 
             $federalLicense->setPublicId($responseData['publicId']);
         } catch (CredovaApiException $e) {
-            throw $e; // TODO: lame.
+            throw new CouldNotSaveException(__('Unable to create federal license: %1', $e->getMessage()), $e);
         }
 
         return $federalLicense;
