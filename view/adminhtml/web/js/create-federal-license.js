@@ -1,11 +1,10 @@
 define([
     'jquery',
-    'mage/storage',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/notification',
     'mage/validation'
-], function ($, storage) {
+], function ($) {
     'use strict';
 
     $.widget('credova.createFederalLicense', {
@@ -60,18 +59,16 @@ define([
         doLicenseLookup: function(licenseNumber) {
             let that = this;
 
-            // TODO: spinner
-            storage.post(
-                this.form.prop('action'),
-                {
+            $.ajax({
+                url: this.form.prop('action'),
+                showLoader: true,
+                data: {
                     license_number: licenseNumber,
                     order_id: this.options.orderId,
                     form_key: FORM_KEY,
                     action: 'get'
-                },
-                false,
-                'application/x-www-form-urlencoded'
-            ).done(function(data) {
+                }
+            }).done(function(data) {
                 switch(data.status) {
                     case 'error':
                         // No such license. Display create fields.
@@ -83,8 +80,6 @@ define([
                         that.formWrapper.modal('closeModal');
                         break;
                 }
-            }).always(function() {
-                // TODO: stop spinner
             });
         },
 
@@ -105,13 +100,11 @@ define([
                 data[this.name] = this.value;
             });
 
-            // TODO: spinner
-            storage.post(
-                this.form.prop('action'),
-                data,
-                false,
-                'application/x-www-form-urlencoded'
-            ).done(function(data) {
+            $.ajax({
+                url: this.form.prop('action'),
+                showLoader: true,
+                data: data
+            }).done(function(data) {
                 switch(data.status) {
                     case 'error':
                         that.displayMessage(data.message, true);
@@ -122,8 +115,6 @@ define([
                         that.formWrapper.modal('closeModal');
                         break;
                 }
-            }).always(function() {
-                // TODO: stop spinner
             });
         },
 
