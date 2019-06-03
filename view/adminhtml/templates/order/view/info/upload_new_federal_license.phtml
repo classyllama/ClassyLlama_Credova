@@ -1,0 +1,39 @@
+<?php
+    /** @var $block \ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\UploadNewFederalLicense */
+
+    $order = $block->getOrder();
+
+    $extensionAttributes = $order->getExtensionAttributes();
+
+    $existingLicenseNumber = $extensionAttributes->getCredovaFederalLicensePublicId();
+
+    if ($order->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE &&  $existingLicenseNumber):
+?>
+
+    <div class="credova-upload-new-license-form-wrapper"
+         data-mage-init='{"uploadNewFederalLicenseCreate": {"publicLicense":"<?= $block->escapeJs($existingLicenseNumber) ?>"}}'>
+        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api')) ?>"
+              method="POST" class="credova-license-get-form" data-mage-init='{"validation": {}}'>
+            <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
+
+            <fieldset class="admin__fieldset">
+
+                <div class="admin__field _required create-field">
+                    <div class="admin__field-label">
+                        <label for="license-name">
+                            <span><?= __('File') ?></span>
+                        </label>
+                    </div>
+                    <div class="admin__field-control">
+                        <input class="admin__control-text required" type="file" name="file_upload" id="file-upload" accept=".PDF, .DOC, .DOCX, .TIF, .JPG, .JPEG, .GIF, .PNG, .XLS, .XLSX, .RAW"
+
+                        />
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+
+    </div>
+
+<?php endif; ?>
