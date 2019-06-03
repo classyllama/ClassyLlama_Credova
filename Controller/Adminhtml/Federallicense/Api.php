@@ -51,6 +51,7 @@ class Api extends \Magento\Backend\App\Action
      */
     protected $orderRepository;
 
+
     /**
      * Api constructor.
      * @param Action\Context $context
@@ -77,6 +78,30 @@ class Api extends \Magento\Backend\App\Action
         $this->federalLicenseFactory = $federalLicenseFactory;
         $this->orderExtensionInterfaceFactory = $orderExtensionInterfaceFactory;
         $this->orderRepository = $orderRepository;
+
+    }
+
+    /**
+     * Set license number on order
+     *
+     * @param int $orderId
+     * @param string $licensePublicId
+     */
+    private function setPublicIdOnOrder(int $orderId, string $licensePublicId)
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        $extensionAttributes = $order->getExtensionAttributes();
+
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
+        }
+
+        $extensionAttributes->setCredovaFederalLicensePublicId($licensePublicId);
+
+        $order->setExtensionAttributes($extensionAttributes);
+
+        $this->orderRepository->save($order);
     }
 
     /**
@@ -115,7 +140,7 @@ class Api extends \Magento\Backend\App\Action
             $license = $this->federalLicenseRepository->get($licenseNumber);
 
             // License successfully found. Go ahead and set number on order.
-            $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
+            $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
 
             return [
                 'status' => 'success',
@@ -137,6 +162,7 @@ class Api extends \Magento\Backend\App\Action
         $license = $this->federalLicenseFactory->create();
 
         $licenseData = $this->getRequest()->getParams();
+        $response = $this->getResponse();
 
         $this->dataObjectHelper->populateWithArray(
             $license,
@@ -144,11 +170,14 @@ class Api extends \Magento\Backend\App\Action
             'ClassyLlama\Credova\Api\Data\FederalLicenseInterface'
         );
 
+
         try {
             $this->federalLicenseRepository->create($license);
 
             // License successfully created. Go ahead and set number on order.
+            $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
             $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
+
 
             return ['status' => __('success')];
         } catch (CouldNotSaveException $e) {
