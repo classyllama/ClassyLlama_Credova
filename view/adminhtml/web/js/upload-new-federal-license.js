@@ -116,29 +116,30 @@ define([
                 }
             });
         },
+
         doLFileUpload: function(){
             let that = this;
             let data = {
                 public_license: that.options.publicLicense,
-                file : that.options.file,
                 action: 'other',
+                fileUpload: btoa($('#file_upload')[0].files[0]),
             };
-
-            console.log(data);
-            console.log(this.form.prop('action'),)
-
+            $.each(that.form.serializeArray(), function() {
+                data[this.name] = this.value;
+            });
+            console.log(data)
             $.ajax({
                 url: this.form.prop('action'),
                 showLoader: true,
                 data: data,
+                // contentType: 'multipart/form-data',
+                // processData: false,
                 method: "POST",
             }).done(function(data) {
                 console.log(data)
-
                 switch(data.status) {
                     case 'error':
                         that.displayMessage(data.message, true);
-                        alert('w got an error :(');
                         break;
                     case 'success':
                         // License created and set on order -- close modal.
