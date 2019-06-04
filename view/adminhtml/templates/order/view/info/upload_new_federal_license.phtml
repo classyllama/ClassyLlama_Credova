@@ -13,7 +13,7 @@
 ?>
 
     <div class="credova-upload-new-license-form-wrapper"
-         data-mage-init='{"credovaFederalLicenseUpload": {"publicLicense":"<?= $block->escapeJs($existingLicenseNumber) ?>"}}'>
+         data-mage-init='{"credovaFederalLicenseUpload": {"orderId":"<?= $block->escapeJs($order->getId()) ?>"}}'>
         <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api/key/').$block->getFormKey()) ?>"
               method="POST" class="credova-license-get-form" enctype="multipart/form-data" data-mage-init='{"validation": {}}'>
 
