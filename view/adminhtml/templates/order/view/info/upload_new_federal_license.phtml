@@ -14,7 +14,7 @@
 
     <div class="credova-upload-new-license-form-wrapper"
          data-mage-init='{"credovaFederalLicenseUpload": {"publicLicense":"<?= $block->escapeJs($existingLicenseNumber) ?>"}}'>
-        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api')) ?>"
+        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api/key/').$block->getFormKey()) ?>"
               method="POST" class="credova-license-get-form" enctype="multipart/form-data" data-mage-init='{"validation": {}}'>
 
 
