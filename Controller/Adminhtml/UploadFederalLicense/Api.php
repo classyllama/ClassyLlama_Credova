@@ -89,72 +89,12 @@ class Api extends \Magento\Backend\App\Action implements CsrfAwareActionInterfac
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \ClassyLlama\Credova\Api\FederalLicenseRepositoryInterface $federalLicenseRepository,
-        \ClassyLlama\Credova\Api\Data\FederalLicenseInterfaceFactory $federalLicenseFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionInterfaceFactory,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        UploadFederalLicense $uploadFederalLicense,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+        UploadFederalLicense $uploadFederalLicense
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->federalLicenseRepository = $federalLicenseRepository;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->federalLicenseFactory = $federalLicenseFactory;
-        $this->orderExtensionInterfaceFactory = $orderExtensionInterfaceFactory;
-        $this->orderRepository = $orderRepository;
         $this->uploadFederalLicense = $uploadFederalLicense;
-        $this->logger = $logger;
         $this->context = $context;
-        $this->filesystem = $filesystem;
-        $this->fileUploaderFactory = $fileUploaderFactory;
-    }
-
-    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
-    {
-        return null;
-    }
-
-    public function validateForCsrf(RequestInterface $request): ?bool
-    {
-        return true;
-    }
-
-    /**
-     * Set license number on order
-     *
-     * @param int $orderId
-     * @param string $licensePublicId
-     */
-    private function setPublicIdOnOrder(int $orderId, string $licensePublicId)
-    {
-
-
-        $order = $this->orderRepository->get($orderId);
-
-        $extensionAttributes = $order->getExtensionAttributes();
-
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
-        }
-
-        $extensionAttributes->setCredovaFederalLicensePublicId($licensePublicId);
-
-        $order->setExtensionAttributes($extensionAttributes);
-
-        $this->orderRepository->save($order);
-    }
-
-
-
-
-
-
-
-    public function uploadNewLicence(){
 
     }
 
