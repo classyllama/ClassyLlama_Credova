@@ -64,7 +64,6 @@ define([
                 data: {
                     license_number: licenseNumber,
                     order_id: this.options.orderId,
-                    form_key: FORM_KEY,
                     action: 'get'
                 }
             }).done(function(data) {
@@ -119,24 +118,22 @@ define([
 
         doLFileUpload: function(){
             let that = this;
-            let data = {
-                public_license: that.options.publicLicense,
-                action: 'other',
-                fileUpload: btoa($('#file_upload')[0].files[0]),
-            };
-            $.each(that.form.serializeArray(), function() {
-                data[this.name] = this.value;
+            let formData = new FormData();
+            $.each(that.form.serializeArray(), function(data) {
+                formData.append(this.name, this.value)
             });
-            console.log(data)
+            formData.append('file', $('#file_upload').prop('files')[0])
+            formData.append('order_id', that.options.orderId,)
+
             $.ajax({
                 url: this.form.prop('action'),
                 showLoader: true,
-                data: data,
-                // contentType: 'multipart/form-data',
-                // processData: false,
+                data: formData,
+                contentType: false,
+                processData: false,
                 method: "POST",
             }).done(function(data) {
-                console.log(data)
+                console.log(data);
                 switch(data.status) {
                     case 'error':
                         that.displayMessage(data.message, true);
@@ -147,7 +144,7 @@ define([
                         that.formWrapper.modal('closeModal');
                         break;
                 }
-            }).fail(function (dat) {
+            }).always(function (dat) {
                 console.log(dat);
             });
         },
