@@ -14,14 +14,14 @@ $viewModel = $this->getData('viewModel');
                 store: "<?= $configHelper->getCredovaStoreCode() ?>"
             });
             //prevent user from getting prequalified a second time
-
+            if (!localStorage.getItem('credovaPublicId')) {
                 CRDV.plugin.inject('credova-button');
                 CRDV.plugin.addEventListener(function (e) {
                     if (e.eventName === CRDV.EVENT_USER_WAS_APPROVED) {
                         localStorage.setItem('credovaPublicId', e.eventArgs.publicId)
                     }
                 });
-
+            }
         });
     })();
 </script>
