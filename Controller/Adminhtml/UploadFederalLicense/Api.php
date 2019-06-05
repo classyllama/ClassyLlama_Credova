@@ -11,6 +11,7 @@ use function PHPSTORM_META\type;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
+
 /**
  * This controller is a thin wrapper around the Federal License Repository.
  *
@@ -21,7 +22,7 @@ use Magento\Framework\App\Request\InvalidRequestException;
  * Since this controller already exists, it's also being used to set license numbers on orders,
  * to avoid an extra request when all the context is already known.
  */
-class Api extends \Magento\Backend\App\Action implements CsrfAwareActionInterface
+class Api extends \Magento\Backend\App\Action
 {
     /**
      * ACL resource ID
@@ -66,14 +67,7 @@ class Api extends \Magento\Backend\App\Action implements CsrfAwareActionInterfac
      * @var Action\Context
      */
     private $context;
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystem;
-    /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     */
-    private $fileUploaderFactory;
+
 
     /**
      * Api constructor.
@@ -89,44 +83,103 @@ class Api extends \Magento\Backend\App\Action implements CsrfAwareActionInterfac
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        UploadFederalLicense $uploadFederalLicense
-    ) {
+        UploadFederalLicense $uploadFederalLicense,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionInterfaceFactory,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+    )
+    {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->uploadFederalLicense = $uploadFederalLicense;
         $this->context = $context;
 
+        $this->logger = $logger;
+        $this->orderRepository = $orderRepository;
+        $this->orderExtensionInterfaceFactory = $orderExtensionInterfaceFactory;
+        $this->dataObjectHelper = $dataObjectHelper;
     }
+
+
+    public function setUploadStatus(int $orderId, string $status)
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        $extensionAttributes = $order->getExtensionAttributes();
+
+
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
+        }
+
+        $extensionAttributes->setCredovaFederalLicenseUploadStatus($status);
+
+
+        $order->setExtensionAttributes($extensionAttributes);
+
+        $this->orderRepository->save($order);
+
+
+    }
+
+    public function getPublicId(int $orderId)
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        $extensionAttributes = $order->getExtensionAttributes();
+
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
+        }
+
+        return $extensionAttributes->getCredovaFederalLicensePublicId();
+    }
+
 
 
     /**
      * Perform federal license actions
      *
-     * @return \Magento\Framework\Controller\Result\Json
+     *
      * @throws LocalizedException
      */
     public function execute()
     {
         try {
-            $request = $this->getRequest();
-
             /** @var \Magento\Framework\Controller\Result\Json $resultJson */
             $resultJson = $this->resultJsonFactory->create();
-            /** @var \Magento\Framework\App\Request\Http $request */
-            $licence = $request->getParam('public_license');
+            $request = $this->getRequest();
+
+            $pubId = $this->getPublicId((int)$request->getParam('order_id'));
             $files = $request->getFiles();
-            $this->uploadFederalLicense->setData(['file'=>$files['file_upload']['tmp_name']]);
+
+            $this->uploadFederalLicense->setData([
+                'file' => $files['file']['tmp_name'],
+                'public_id' => $pubId
+            ]);
+
             $response = $this->uploadFederalLicense->getResponse();
 
-            return $resultJson->setData(['status' => __('success')]);
+            $responseData = json_decode($response->getBody(),true);
+
+            if(key_exists('status', $responseData)){
+                $this->setUploadStatus($request->getParam('order_id'),$responseData['status']);
+                return $resultJson->setData(['status'=>__('success')]);;
+            }else{
+                return $resultJson->setData([
+                    'status' => __('error'),
+                    'message' => __('File Upload was not successful.')
+                ]);
+            }
+
         } catch (CouldNotSaveException $e) {
             return $resultJson->setData([
                 'status' => __('error'),
                 'message' => $e->getMessage()
             ]);
         }
-
-
-
     }
 }
+
+
