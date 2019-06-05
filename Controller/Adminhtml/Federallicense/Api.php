@@ -105,35 +105,13 @@ class Api extends \Magento\Backend\App\Action
         $this->orderRepository->save($order);
     }
 
-    /**
-     * Set license number on order
-     *
-     * @param int $orderId
-     * @param string $licenseNumber
-     */
-    private function setLicenseNumberOnOrder(int $orderId, string $licenseNumber)
-    {
-        $order = $this->orderRepository->get($orderId);
-
-        $extensionAttributes = $order->getExtensionAttributes();
-
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
-        }
-
-        $extensionAttributes->setCredovaFederalLicenseNumber($licenseNumber);
-
-        $order->setExtensionAttributes($extensionAttributes);
-
-        $this->orderRepository->save($order);
-    }
 
     /**
      * Get and associate federal license
      *
      * @return array
      */
-    private function getLicense(): array
+    private function getLicensePublicId(): array
     {
         $licenseNumber = $this->getRequest()->getParam('license_number');
 
@@ -141,7 +119,7 @@ class Api extends \Magento\Backend\App\Action
             $license = $this->federalLicenseRepository->get($licenseNumber);
 
             // License successfully found. Go ahead and set number on order.
-            $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
+            $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
 
             return [
                 'status' => 'success',
@@ -176,8 +154,6 @@ class Api extends \Magento\Backend\App\Action
             $this->federalLicenseRepository->create($license);
 
             $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
-            $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
-
 
             return ['status' => __('success')];
         } catch (CouldNotSaveException $e) {
@@ -208,7 +184,7 @@ class Api extends \Magento\Backend\App\Action
 
         switch ($request->getParam('action')) {
             case 'get':
-                $resultData = $this->getLicense();
+                $resultData = $this->getLicensePublicId();
                 break;
             case 'create':
                 $resultData = $this->createLicense();
