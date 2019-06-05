@@ -55,75 +55,24 @@ define([
 
         },
 
-        doLicenseLookup: function(licenseNumber) {
-            let that = this;
-
-            $.ajax({
-                url: this.form.prop('action'),
-                showLoader: true,
-                data: {
-                    license_number: licenseNumber,
-                    order_id: this.options.orderId,
-                    action: 'get'
-                }
-            }).done(function(data) {
-                switch(data.status) {
-                    case 'error':
-                        // No such license. Display create fields.
-                        that.displayCreateFields();
-                        break;
-                    case 'success':
-                        // License exists and set on order -- close modal.
-                        that.displayMessage('Federal license created.', false);
-                        that.formWrapper.modal('closeModal');
-                        break;
-                }
-            });
-        },
-
         displayCreateFields: function() {
             this.formWrapper.addClass('create');
 
             this.formWrapper.find('.create-field input').removeProp('disabled');
         },
 
-        doLicenseCreate: function() {
-            let that = this;
-            let data = {
-                order_id: that.options.orderId,
-                action: 'create'
-            };
-
-            $.each(this.form.serializeArray(), function() {
-                data[this.name] = this.value;
-            });
-
-            $.ajax({
-                url: this.form.prop('action'),
-                showLoader: true,
-                data: data
-            }).done(function(data) {
-                switch(data.status) {
-                    case 'error':
-                        that.displayMessage(data.message, true);
-                        break;
-                    case 'success':
-                        // License created and set on order -- close modal.
-                        that.displayMessage('Federal license created.', false);
-                        that.formWrapper.modal('closeModal');
-                        break;
-                }
-            });
-        },
 
         doLFileUpload: function(){
             let that = this;
             let formData = new FormData();
+
             $.each(that.form.serializeArray(), function(data) {
                 formData.append(this.name, this.value)
             });
+
             formData.append('file', $('#file_upload').prop('files')[0])
             formData.append('order_id', that.options.orderId,)
+
 
             $.ajax({
                 url: this.form.prop('action'),
@@ -133,20 +82,16 @@ define([
                 processData: false,
                 method: "POST",
             }).done(function(data) {
-                console.log(data);
                 switch(data.status) {
                     case 'error':
                         that.displayMessage(data.message, true);
                         break;
                     case 'success':
-                        // License created and set on order -- close modal.
-                        that.displayMessage('Federal license created.', false);
+                        that.displayMessage('Federal license File Uploaded.', false);
                         that.formWrapper.modal('closeModal');
                         break;
                 }
-            }).always(function (dat) {
-                console.log(dat);
-            });
+            })
         },
 
         displayMessage: function(message, error) {
@@ -162,14 +107,6 @@ define([
                     }
                 });
         },
-
-        clickHandler: function(){
-            $('#credova-upload-new-federal-license').on('click',function () {
-                alert('hello');
-                console.log('hello')
-            })
-        }
-
 
 
     });
