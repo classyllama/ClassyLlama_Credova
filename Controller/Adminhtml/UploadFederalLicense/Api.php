@@ -67,18 +67,16 @@ class Api extends \Magento\Backend\App\Action
      * @var Action\Context
      */
     private $context;
-
-
+    
     /**
      * Api constructor.
      * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \ClassyLlama\Credova\Api\FederalLicenseRepositoryInterface $federalLicenseRepository
-     * @param \ClassyLlama\Credova\Api\Data\FederalLicenseInterfaceFactory $federalLicenseFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param UploadFederalLicense $uploadFederalLicense
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionInterfaceFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-     * @param UploadFederalLicense $uploadFederalLicense
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
         Action\Context $context,
@@ -94,7 +92,6 @@ class Api extends \Magento\Backend\App\Action
         $this->resultJsonFactory = $resultJsonFactory;
         $this->uploadFederalLicense = $uploadFederalLicense;
         $this->context = $context;
-
         $this->logger = $logger;
         $this->orderRepository = $orderRepository;
         $this->orderExtensionInterfaceFactory = $orderExtensionInterfaceFactory;
@@ -105,28 +102,21 @@ class Api extends \Magento\Backend\App\Action
     public function setUploadStatus(int $orderId, string $status)
     {
         $order = $this->orderRepository->get($orderId);
-
         $extensionAttributes = $order->getExtensionAttributes();
-
 
         if ($extensionAttributes === null) {
             $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
         }
 
         $extensionAttributes->setCredovaFederalLicenseUploadStatus($status);
-
-
         $order->setExtensionAttributes($extensionAttributes);
-
         $this->orderRepository->save($order);
-
 
     }
 
     public function getPublicId(int $orderId)
     {
         $order = $this->orderRepository->get($orderId);
-
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
@@ -137,9 +127,8 @@ class Api extends \Magento\Backend\App\Action
     }
 
 
-
     /**
-     * Perform federal license actions
+     * Perform Upload federal license actions
      *
      *
      * @throws LocalizedException
@@ -160,19 +149,17 @@ class Api extends \Magento\Backend\App\Action
             ]);
 
             $response = $this->uploadFederalLicense->getResponse();
+            $responseData = json_decode($response->getBody(), true);
 
-            $responseData = json_decode($response->getBody(),true);
-
-            if(key_exists('status', $responseData)){
-                $this->setUploadStatus($request->getParam('order_id'),$responseData['status']);
-                return $resultJson->setData(['status'=>__('success')]);;
-            }else{
+            if (key_exists('status', $responseData)) {
+                $this->setUploadStatus($request->getParam('order_id'), $responseData['status']);
+                return $resultJson->setData(['status' => __('success')]);;
+            } else {
                 return $resultJson->setData([
                     'status' => __('error'),
                     'message' => __('File Upload was not successful.')
                 ]);
             }
-
         } catch (CouldNotSaveException $e) {
             return $resultJson->setData([
                 'status' => __('error'),

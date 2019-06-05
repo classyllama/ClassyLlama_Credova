@@ -48,7 +48,7 @@ class UploadFederalLicense extends \ClassyLlama\Credova\CredovaApi\Authenticated
      * @return array
      * @throws CredovaApiException
      */
-    protected function getHeaders() : array
+    protected function getHeaders(): array
     {
         $headers = parent::getHeaders();
 
@@ -82,12 +82,12 @@ class UploadFederalLicense extends \ClassyLlama\Credova\CredovaApi\Authenticated
         $client->setUri($this->getUri());
         $client->setMethod($this->getMethod());
         $client->setHeaders($this->getHeaders());
-        $client->setFileUpload($requestBody['file'] , 'file');
+        $client->setFileUpload($requestBody['file'], 'file');
         $this->prepareRequest($client);
         /** @var \Zend\Http\Response $response */
         $response = $client->send();
         if (!$response->isSuccess()) {
-            if( strpos( $response->getBody(), 'File')){
+            if (strpos($response->getBody(), 'File')) {
                 throw new CredovaApiException(__($response->getBody()));
             };
         }

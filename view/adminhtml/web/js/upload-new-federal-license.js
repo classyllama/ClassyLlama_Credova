@@ -11,7 +11,7 @@ define([
         formWrapper: null,
         form: null,
 
-        _getModalOptions: function() {
+        _getModalOptions: function () {
             return {
                 'title': $.mage.__('Upload New Federal License'),
                 'type': 'slide',
@@ -28,45 +28,39 @@ define([
         _create: function () {
             this.formWrapper = $('.credova-upload-new-license-form-wrapper');
             this.form = this.formWrapper.find('form');
-
             this.wireModal();
         },
 
-        wireModal: function() {
+        wireModal: function () {
             let that = this;
 
             that.formWrapper
                 .modal(this._getModalOptions())
                 .addClass('modal');
 
-            $('#credova-upload-new-federal-license').click(function() {
+            $('#credova-upload-new-federal-license').click(function () {
 
                 that.formWrapper.modal('openModal');
             });
-
         },
 
-        handleSubmit: function() {
-
+        handleSubmit: function () {
             if (!this.form.valid()) {
                 return;
             }
             this.doLFileUpload();
-
         },
 
-        displayCreateFields: function() {
+        displayCreateFields: function () {
             this.formWrapper.addClass('create');
-
             this.formWrapper.find('.create-field input').removeProp('disabled');
         },
 
-
-        doLFileUpload: function(){
+        doLFileUpload: function () {
             let that = this;
             let formData = new FormData();
 
-            $.each(that.form.serializeArray(), function(data) {
+            $.each(that.form.serializeArray(), function (data) {
                 formData.append(this.name, this.value)
             });
 
@@ -81,8 +75,8 @@ define([
                 contentType: false,
                 processData: false,
                 method: "POST",
-            }).done(function(data) {
-                switch(data.status) {
+            }).done(function (data) {
+                switch (data.status) {
                     case 'error':
                         that.displayMessage(data.message, true);
                         break;
@@ -94,7 +88,7 @@ define([
             })
         },
 
-        displayMessage: function(message, error) {
+        displayMessage: function (message, error) {
             $('body').notification('clear')
                 .notification('add', {
                     error: error,
@@ -107,8 +101,6 @@ define([
                     }
                 });
         },
-
-
     });
 
     return $.credova.uploadNewFederalLicense;
