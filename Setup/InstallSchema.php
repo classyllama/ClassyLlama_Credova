@@ -11,7 +11,6 @@ class InstallSchema implements InstallSchemaInterface
 {
     const SALES_ORDER_TABLE = 'sales_order';
     const SALES_ORDER_CREDOVA_APPLICATION_ID = 'credova_application_id';
-    const SALES_ORDER_CREDOVA_LICENSE_NUMBER = 'credova_federal_license_number';
     const SALES_ORDER_CREDOVA_LICENSE_PUBLIC_ID = 'credova_federal_license_public_id';
     const SALES_ORDER_CREDOVA_LICENSE_UPLOAD_STATUS = 'credova_federal_license_upload_status';
 
@@ -40,21 +39,10 @@ class InstallSchema implements InstallSchemaInterface
         $setup->getConnection()
             ->addColumn(
                 $setup->getTable(self::SALES_ORDER_TABLE),
-                self::SALES_ORDER_CREDOVA_LICENSE_NUMBER,
-                [
-                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => 20,
-                    'comment' =>'Credova Federal License Number'
-                ]
-            );
-
-        $setup->getConnection()
-            ->addColumn(
-                $setup->getTable(self::SALES_ORDER_TABLE),
                 self::SALES_ORDER_CREDOVA_LICENSE_PUBLIC_ID,
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => 20,
+                    'length' => 255,
                     'comment' =>'Credova Federal License Public Id'
                 ]
             );

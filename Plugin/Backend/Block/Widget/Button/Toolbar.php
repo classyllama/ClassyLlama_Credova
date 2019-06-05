@@ -47,6 +47,15 @@ class Toolbar
                         'label' => __('Create Federal License')
                     ]
                 );
+             if($context->getOrder()->getExtensionAttributes()->getCredovaFederalLicensePublicId()){
+                 $buttonList->add(
+                     'credova-upload-new-federal-license',
+                     [
+                         'label' => __('Upload New Federal License')
+                     ]
+                 );
+             }
+
             }
         }
 

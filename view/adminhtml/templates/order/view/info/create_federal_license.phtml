@@ -5,7 +5,6 @@
 
     $extensionAttributes = $order->getExtensionAttributes();
 
-    $existingLicenseNumber = $extensionAttributes !== null ? $extensionAttributes->getCredovaFederalLicenseNumber() : '';
 
     if ($order->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE):
 ?>
@@ -25,7 +24,6 @@
                     </div>
                     <div class="admin__field-control">
                         <input class="admin__control-text required" type="text" name="license_number" id="license-number" maxlength="20"
-                               value="<?= $block->escapeHtmlAttr($existingLicenseNumber) ?>"
                         />
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
     <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
         <attribute code="credova_application_id" type="string" />
-        <attribute code="credova_federal_license_number" type="string" />
+        <attribute code="credova_federal_license_public_id" type="string" />
+        <attribute code="credova_federal_license_upload_status" type="string" />
     </extension_attributes>
 </config>
