@@ -184,7 +184,7 @@ class Api extends \Magento\Backend\App\Action
 
         switch ($request->getParam('action')) {
             case 'get':
-                $resultData = $this->getLicensePublicId();
+                $resultData = ['status' => __('error')];
                 break;
             case 'create':
                 $resultData = $this->createLicense();

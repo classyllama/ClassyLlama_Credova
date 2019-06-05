@@ -1,14 +1,6 @@
 <?php
     /** @var $block \ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\UploadNewFederalLicense */
     $order = $block->getOrder();
-
-    /** @var $license  */
-
-    $extensionAttributes = $order->getExtensionAttributes();
-
-    $existingLicenseNumber = $extensionAttributes->getCredovaFederalLicenseNumber() ;
-//    $existingLicenseNumber = $extensionAttributes->getCredovaFederalLicensePublicId() ;
-
     if ($order->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE ):
 ?>
 
