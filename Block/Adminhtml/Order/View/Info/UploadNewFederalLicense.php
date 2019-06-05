@@ -36,11 +36,4 @@ class UploadNewFederalLicense extends \Magento\Backend\Block\Template
         return $order;
     }
 
-//    /**
-//     * @return string
-//     */
-//    protected function _toHtml()
-//    {
-//        return ($this->getOrder()->getPayment()->getMethod() === Directpost::METHOD_CODE) ? parent::_toHtml() : '';
-//    }
 }
