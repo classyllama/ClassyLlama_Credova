@@ -42,6 +42,8 @@ class UploadFederalLicense extends \ClassyLlama\Credova\CredovaApi\Authenticated
 
 
     /**
+     * Sets header for file upload
+     *
      * @param int|null $contentLength
      * @return array
      * @throws CredovaApiException
@@ -85,10 +87,10 @@ class UploadFederalLicense extends \ClassyLlama\Credova\CredovaApi\Authenticated
         /** @var \Zend\Http\Response $response */
         $response = $client->send();
         if (!$response->isSuccess()) {
-            var_dump($client);
-            throw new CredovaApiException(__('Error on Credova API request'. $response->getBody())); //TODO $response->getBody should be removed before merging
+            if( strpos( $response->getBody(), 'File')){
+                throw new CredovaApiException(__($response->getBody()));
+            };
         }
-        $this->logger->debug($response->getBody() . "[BODY]");
         return $response;
     }
 
