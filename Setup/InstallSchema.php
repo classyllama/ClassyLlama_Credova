@@ -54,7 +54,7 @@ class InstallSchema implements InstallSchemaInterface
                 self::SALES_ORDER_CREDOVA_LICENSE_PUBLIC_ID,
                 [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'length' => 20,
+                    'length' => 255,
                     'comment' =>'Credova Federal License Public Id'
                 ]
             );

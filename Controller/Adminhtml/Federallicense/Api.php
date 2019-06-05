@@ -70,7 +70,8 @@ class Api extends \Magento\Backend\App\Action
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Sales\Api\Data\OrderExtensionFactory $orderExtensionInterfaceFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->federalLicenseRepository = $federalLicenseRepository;
@@ -132,7 +133,7 @@ class Api extends \Magento\Backend\App\Action
      *
      * @return array
      */
-    private function getLicense() : array
+    private function getLicense(): array
     {
         $licenseNumber = $this->getRequest()->getParam('license_number');
 
@@ -156,7 +157,7 @@ class Api extends \Magento\Backend\App\Action
      *
      * @return array
      */
-    private function createLicense() : array
+    private function createLicense(): array
     {
         /** @var \ClassyLlama\Credova\Api\Data\FederalLicenseInterface $license */
         $license = $this->federalLicenseFactory->create();
@@ -174,7 +175,6 @@ class Api extends \Magento\Backend\App\Action
         try {
             $this->federalLicenseRepository->create($license);
 
-            // License successfully created. Go ahead and set number on order.
             $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
             $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
 

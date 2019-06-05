@@ -5,6 +5,10 @@
             <block class="ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\CreateFederalLicense"
                    name="credova_create_federal_license"
                    template="ClassyLlama_Credova::order/view/info/create_federal_license.phtml" />
+            <block class="ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\UploadNewFederalLicense"
+                   name="upload_new_federal_license"
+                   template="ClassyLlama_Credova::order/view/info/upload_new_federal_license.phtml" />
+
         </referenceContainer>
     </body>
 </page>
