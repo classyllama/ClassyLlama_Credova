@@ -28,6 +28,12 @@
         </arguments>
     </type>
 
+    <type name="ClassyLlama\Credova\Observer\Sales\Order\PaymentPlaceEnd">
+        <arguments>
+            <argument name="logger" xsi:type="object">ClassyLlama\Credova\Logger\Credova</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
