@@ -93,7 +93,7 @@ class UploadInvoiceRequest extends \ClassyLlama\Credova\CredovaApi\Authenticated
     /**
      * @inheritdoc
      */
-    protected function getData(): array
+    public function getData(): array
     {
         // make sure no json data will be set to body if parent has defaults
         return [];

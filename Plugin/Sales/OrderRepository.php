@@ -45,6 +45,7 @@ class OrderRepository
             // Copy extension attribute data to column value
             $order->setCredovaApplicationId($orderExtensionAttributes->getCredovaApplicationId());
             $order->setCredovaFederalLicensePublicId($orderExtensionAttributes->getCredovaFederalLicensePublicId());
+            $order->setCredovaFederalLicenseNumber($orderExtensionAttributes->getCredovaFederalLicenseNumber());
             $order->setCredovaFederalLicenseUploadStatus($orderExtensionAttributes->getCredovaFederalLicenseUploadStatus());
         }
 
@@ -67,6 +68,7 @@ class OrderRepository
             // Copy column values to extension attributes
             $orderExtensionAttributes->setCredovaApplicationId($order->getCredovaApplicationId());
             $orderExtensionAttributes->setCredovaFederalLicensePublicId($order->getCredovaFederalLicensePublicId());
+            $orderExtensionAttributes->setCredovaFederalLicenseNumber($order->getCredovaFederalLicenseNumber());
             $orderExtensionAttributes->setCredovaFederalLicenseUploadStatus($order->getCredovaFederalLicenseUploadStatus());
 
             // Done.

@@ -27,7 +27,8 @@ class PaymentPlaceEnd implements ObserverInterface
     public function __construct(
         InvoiceManagement $invoiceManagement,
         LoggerInterface $logger
-    ) {
+    )
+    {
         $this->invoiceManagement = $invoiceManagement;
         $this->logger = $logger;
     }
@@ -36,10 +37,10 @@ class PaymentPlaceEnd implements ObserverInterface
      * Upload created invoice to Credova API once payment is successfully done.
      *
      * Credova application public ID gets set to order instance during capture process
-     * @see \ClassyLlama\Credova\Model\Method\Credova::capture
-     *
      * @param Observer $observer
      * @return void
+     * @see \ClassyLlama\Credova\Model\Method\Credova::capture
+     *
      */
     public function execute(Observer $observer)
     {
@@ -47,25 +48,18 @@ class PaymentPlaceEnd implements ObserverInterface
         $payment = $observer->getEvent()->getPayment();
         /** @var \Magento\Sales\Model\Order\Invoice $invoice */
         $invoice = $payment->getCreatedInvoice();
-        if (!$invoice) {
+
+        if (!$invoice || $payment->getMethod() !== 'credova') {
             return;
         }
 
-        $publicId = null;
-        $orderExtensionAttributes = $invoice->getOrder()->getExtensionAttributes();
-        if ($orderExtensionAttributes !== null) {
-            $publicId = $orderExtensionAttributes->getCredovaApplicationId();
-        }
-
-        if ($publicId) {
-            try {
-                $this->invoiceManagement->uploadInvoice($publicId, $invoice);
-            } catch (CouldNotUploadInvoiceException $e) {
-                // do not break order placement flow if invoice upload has failed
-                $this->logger->debug($e->getMessage(), [
-                    'trace' => $e->getTrace()
-                ]);
-            }
+        try {
+            $this->invoiceManagement->uploadInvoice($invoice->getTransactionId(), $invoice);
+        } catch (CouldNotUploadInvoiceException $e) {
+            // do not break order placement flow if invoice upload has failed
+            $this->logger->debug($e->getMessage(), [
+                'trace' => $e->getTrace()
+            ]);
         }
     }
 }

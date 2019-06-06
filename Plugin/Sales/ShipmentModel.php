@@ -25,6 +25,13 @@ class ShipmentModel
             return $result;
         }
 
+        $federalLicenseNumber = null;
+        $orderExtensionAttributes = $subject->getOrder()->getExtensionAttributes();
+
+        if($orderExtensionAttributes !== null) {
+            $federalLicenseNumber = $orderExtensionAttributes->getCredovaFederalLicenseNumber();
+        }
+
         foreach ($subject->getOrder()->getInvoiceCollection()->getItems() as $invoice) {
             if(\count($subject->getTracks()) === 0) {
                 throw new \Exception("Must specify a tracking number to ship a credova purchase");
@@ -32,8 +39,7 @@ class ShipmentModel
 
             $request = $this->deliveryInformationFactory->create(['deliverInformation' => [
                 'publicId' => $invoice->getTransactionId(),
-                // TODO: Get federal license number
-                'federalLicenseNumber' => 'abc123',
+                'federalLicenseNumber' => $federalLicenseNumber,
                 'method' => 'shipped',
                 // TODO: Verify what to do with multiple tracking numbers
                 'carrier' => $subject->getTracks()[0]->getCarrierCode(),
@@ -46,9 +52,9 @@ class ShipmentModel
 
             $response = $request->getResponseData();
 
-            if (!array_key_exists('publicId', $response)) {
+            if (!array_key_exists('status', $response)) {
                 // TODO: Properly handle API errors
-                throw new \Exception($response);
+                throw new \Exception(json_encode($response));
             }
         }
 

@@ -2,7 +2,6 @@ import Component from 'Magento_Checkout/js/view/payment/default';
 import quote from 'Magento_Checkout/js/model/quote';
 import storage from 'mage/storage';
 import urlBuilder from 'Magento_Checkout/js/model/url-builder';
-import checkoutData from 'Magento_Checkout/js/checkout-data';
 import 'credovaPlugin'
 
 
@@ -18,7 +17,7 @@ export default Component.extend({
         preQualificationId: null
     },
 
-    initialize: function initialize() {
+    initialize() {
         this._super();
 
         this.publicId = null;
@@ -33,7 +32,7 @@ export default Component.extend({
         window.CRDV.plugin.addEventListener(this.onCredovaEvent.bind(this));
     },
 
-    onCredovaEvent: function onCredovaEvent(event) {
+    onCredovaEvent(event) {
         if (event.eventName !== window.CRDV.EVENT_USER_WAS_APPROVED) {
             return;
         }
@@ -43,18 +42,18 @@ export default Component.extend({
         window.alert("User was approved and publicId is " + this.preQualificationId);
     },
 
-    initializeCredovaButton: function initializeCredovaButton(element) {
+    initializeCredovaButton(element) {
         element.dataset.amount = quote.totals()['grand_total'];
 
         window.CRDV.plugin.injectButton(element);
     },
 
     /** Returns is method available */
-    isAvailable: function () {
+    isAvailable() {
         return quote.totals()['grand_total'] >= 300;
     },
 
-    getData: function () {
+    getData() {
         return {
             'method': this.item.method,
             'po_number': null,
@@ -64,10 +63,20 @@ export default Component.extend({
         };
     },
 
-    authorizeCredovaFinancing: function authorizeCredovaFinancing() {
+    authorizeCredovaFinancing() {
+        const publicId = localStorage.getItem('credovaPublicId');
+
+        if (publicId !== null) {
+            this.publicId(publicId);
+            return this.displayCredovaPopup();
+        }
+
         const billingAddress = quote.billingAddress();
 
-        if (!checkPropertyValues({...billingAddress, guestEmail: quote.guestEmail}, ['firstname', 'lastname', 'telephone', 'guestEmail'])) {
+        if (!checkPropertyValues({
+            ...billingAddress,
+            guestEmail: quote.guestEmail
+        }, ['firstname', 'lastname', 'telephone', 'guestEmail'])) {
             // TODO: Notifiy user they need valid billing address info
             return;
         }
@@ -92,17 +101,19 @@ export default Component.extend({
             }
 
             this.publicId(publicId);
-
-            // TODO: Figure out capture
-            window.CRDV.plugin.checkout(this.publicId()).then(approved => {
-                this.applicationRequestProcessing(false);
-
-                if (!approved) {
-                    return;
-                }
-
-                this.placeOrder();
-            });
+            this.displayCredovaPopup();
         }).fail(() => this.applicationRequestProcessing(false));
+    },
+
+    displayCredovaPopup() {
+        window.CRDV.plugin.checkout(this.publicId()).then(approved => {
+            this.applicationRequestProcessing(false);
+
+            if (!approved) {
+                return;
+            }
+
+            this.placeOrder();
+        });
     }
 });

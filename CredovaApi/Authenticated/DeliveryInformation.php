@@ -40,9 +40,4 @@ class DeliveryInformation extends AuthenticatedRequestAbstract
     {
         return \Zend\Http\Request::METHOD_POST;
     }
-
-    protected function getData(): array
-    {
-        return $this->data;
-    }
 }

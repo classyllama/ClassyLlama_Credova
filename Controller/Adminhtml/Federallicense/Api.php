@@ -109,9 +109,9 @@ class Api extends \Magento\Backend\App\Action
      * Set license number on order
      *
      * @param int $orderId
-     * @param string $licensePublicId
+     * @param string $licenseNumber
      */
-    private function setLicenseNumberOnOrder(int $orderId, string $licensePublicId)
+    private function setLicenseNumberOnOrder(int $orderId, string $licenseNumber)
     {
         $order = $this->orderRepository->get($orderId);
 
@@ -121,7 +121,7 @@ class Api extends \Magento\Backend\App\Action
             $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
         }
 
-        $extensionAttributes->setCredovaFederalLicensePublicId($licensePublicId);
+        $extensionAttributes->setCredovaFederalLicenseNumber($licenseNumber);
 
         $order->setExtensionAttributes($extensionAttributes);
 
@@ -142,6 +142,7 @@ class Api extends \Magento\Backend\App\Action
 
             // License successfully found. Go ahead and set number on order.
             $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
+            $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
 
             return [
                 'status' => 'success',
@@ -176,6 +177,7 @@ class Api extends \Magento\Backend\App\Action
             $this->federalLicenseRepository->create($license);
 
             $this->setPublicIdOnOrder($this->getRequest()->getParam('order_id'), $license->getPublicId());
+            $this->setLicenseNumberOnOrder($this->getRequest()->getParam('order_id'), $license->getLicenseNumber());
 
             return ['status' => __('success')];
         } catch (CouldNotSaveException $e) {
@@ -206,7 +208,7 @@ class Api extends \Magento\Backend\App\Action
 
         switch ($request->getParam('action')) {
             case 'get':
-                $resultData = ['status' => __('error')];
+                $resultData = $this->getLicensePublicId();
                 break;
             case 'create':
                 $resultData = $this->createLicense();
