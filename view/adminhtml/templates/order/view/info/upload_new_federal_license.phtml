@@ -1,28 +1,23 @@
 <?php
-    /** @var $block \ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\UploadNewFederalLicense */
-    $order = $block->getOrder();
+/** @var $block \ClassyLlama\Credova\Block\Adminhtml\Order\View\Info\UploadNewFederalLicense */
+$order = $block->getOrder();
 
-    /** @var $license  */
+/** @var $license */
 
-    $extensionAttributes = $order->getExtensionAttributes();
+$extensionAttributes = $order->getExtensionAttributes();
 
-    $existingLicenseNumber = $extensionAttributes->getCredovaFederalLicensePublicId() ;
-//    $existingLicenseNumber = $extensionAttributes->getCredovaFederalLicensePublicId() ;
+$existingLicenseNumber = $extensionAttributes->getCredovaFederalLicensePublicId();
 
-    if ($order->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE ):
-?>
+if ($order->getPayment()->getMethod() == \ClassyLlama\Credova\Model\Method\Credova::CODE):
+    ?>
 
     <div class="credova-upload-new-license-form-wrapper"
          data-mage-init='{"credovaFederalLicenseUpload": {"orderId":"<?= $block->escapeJs($order->getId()) ?>"}}'>
-        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api/key/').$block->getFormKey()) ?>"
-              method="POST" class="credova-license-get-form" enctype="multipart/form-data" data-mage-init='{"validation": {}}'>
-
-
-            <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
-
-
+        <form action="<?= $block->escapeHtmlAttr($block->getUrl('credova/uploadfederallicense/api/key/') . $block->getFormKey()) ?>"
+              method="POST" class="credova-license-get-form" enctype="multipart/form-data"
+              data-mage-init='{"validation": {}}'>
+            <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
             <fieldset class="admin__fieldset">
-
                 <div class="admin__field _required create-field">
                     <div class="admin__field-label">
                         <label for="file">
@@ -30,19 +25,14 @@
                         </label>
                     </div>
                     <div class="admin__field-control">
-                        <input class="admin__control-text required" type="file" name="file_upload" size="25" id="file_upload" accept=".PDF, .DOC, .DOCX, .TIF, .JPG, .JPEG, .GIF, .PNG, .XLS, .XLSX, .RAW"
+                        <input class="admin__control-text required" type="file" name="file_upload" size="25"
+                               id="file_upload"
+                               accept=".PDF, .DOC, .DOCX, .TIF, .JPG, .JPEG, .GIF, .PNG, .XLS, .XLSX, .RAW"
                         />
                     </div>
                 </div>
             </fieldset>
-
-            <button type="submit">Submit</button>
-
-
-
-
         </form>
-
     </div>
 
 <?php endif; ?>
