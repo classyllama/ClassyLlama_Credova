@@ -52,4 +52,8 @@
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="persist_credova_extension_attributes" type="ClassyLlama\Credova\Plugin\Sales\OrderRepository"/>
     </type>
+
+    <type name="Magento\Sales\Model\Order\Shipment">
+        <plugin name="credova_register_shipment" type="ClassyLlama\Credova\Plugin\Sales\ShipmentModel"/>
+    </type>
 </config>
