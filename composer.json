@@ -10,9 +10,9 @@
     }
   },
   "require": {
-    "magento/module-payment": "100.3.*",
-    "magento/module-checkout": "100.3.*",
-    "magento/module-sales": "102.*.*",
+    "magento/module-payment": "*",
+    "magento/module-checkout": "*",
+    "magento/module-sales": "*",
     "giggsey/libphonenumber-for-php": "8.10.12",
     "ext-json": "*"
   }
