@@ -105,6 +105,28 @@ class Api extends \Magento\Backend\App\Action
         $this->orderRepository->save($order);
     }
 
+    /**
+     * Set license number on order
+     *
+     * @param int $orderId
+     * @param string $licensePublicId
+     */
+    private function setLicenseNumberOnOrder(int $orderId, string $licensePublicId)
+    {
+        $order = $this->orderRepository->get($orderId);
+
+        $extensionAttributes = $order->getExtensionAttributes();
+
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->orderExtensionInterfaceFactory->create();
+        }
+
+        $extensionAttributes->setCredovaFederalLicensePublicId($licensePublicId);
+
+        $order->setExtensionAttributes($extensionAttributes);
+
+        $this->orderRepository->save($order);
+    }
 
     /**
      * Get and associate federal license
