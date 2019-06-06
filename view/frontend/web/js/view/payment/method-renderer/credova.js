@@ -68,7 +68,6 @@ export default Component.extend({
 
         if (publicId !== null) {
             this.publicId(publicId);
-            return this.displayCredovaPopup();
         }
 
         const billingAddress = quote.billingAddress();
@@ -90,7 +89,8 @@ export default Component.extend({
                     "first_name": billingAddress.firstname,
                     "last_name": billingAddress.lastname,
                     "phone_number": billingAddress.telephone,
-                    "email": billingAddress.guestEmail
+                    "email": billingAddress.guestEmail,
+                    "public_id": this.publicId()
                 }
             }),
             false
@@ -113,6 +113,7 @@ export default Component.extend({
                 return;
             }
 
+            localStorage.removeItem('credovaPublicId');
             this.placeOrder();
         });
     }

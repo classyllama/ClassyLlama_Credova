@@ -74,6 +74,18 @@ class Application implements ApplicationInterface
             ];
         }
 
+        $shippingAddressInfo = $this->checkoutSession->getQuote()->getShippingAddress();
+        $shippingAddressAmount = $shippingAddressInfo->getBaseShippingInclTax() - $shippingAddressInfo->getBaseShippingDiscountAmount();
+
+        if($shippingAddressAmount > 0) {
+            $data['products'][] = [
+                'id' => 'shipping',
+                'description' => 'Shipping',
+                'quantity' => 1,
+                'value' => $shippingAddressAmount
+            ];
+        }
+
         if ($applicationInfo->getPublicId() !== null) {
             $data['publicId'] = $applicationInfo->getPublicId();
         }
