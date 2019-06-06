@@ -13,7 +13,15 @@ $viewModel = $this->getData('viewModel');
                 environment: CRDV.Environment.<?= $configHelper->getCredovaEnvironment() ?>,
                 store: "<?= $configHelper->getCredovaStoreCode() ?>"
             });
-            CRDV.plugin.inject('credova-button');
+            //prevent user from getting prequalified a second time
+            if (!localStorage.getItem('credovaPublicId')) {
+                CRDV.plugin.inject('credova-button');
+                CRDV.plugin.addEventListener(function (e) {
+                    if (e.eventName === CRDV.EVENT_USER_WAS_APPROVED) {
+                        localStorage.setItem('credovaPublicId', e.eventArgs.publicId)
+                    }
+                });
+            }
         });
     })();
 </script>
