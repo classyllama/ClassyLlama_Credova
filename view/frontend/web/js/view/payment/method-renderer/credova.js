@@ -72,10 +72,7 @@ export default Component.extend({
 
         const billingAddress = quote.billingAddress();
 
-        if (!checkPropertyValues({
-            ...billingAddress,
-            guestEmail: quote.guestEmail
-        }, ['firstname', 'lastname', 'telephone', 'guestEmail'])) {
+        if (!checkPropertyValues(billingAddress, ['firstname', 'lastname', 'telephone'])) {
             // TODO: Notifiy user they need valid billing address info
             return;
         }

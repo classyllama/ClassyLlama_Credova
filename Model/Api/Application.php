@@ -49,6 +49,12 @@ class Application implements ApplicationInterface
     {
         $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
+        $email = $applicationInfo->getEmail();
+
+        if ($email === null) {
+            $email = $this->checkoutSession->getQuote()->getCustomerEmail();
+        }
+
         // TODO: Handle exception when number is malformed
         // Need to parse the phone number to ensure it's formatted properly for Credova's api
         $phoneNumber = $phoneUtil->parse($applicationInfo->getPhoneNumber(), "US");
@@ -58,7 +64,7 @@ class Application implements ApplicationInterface
             'redirectUrl' => $this->urlBuilder->getRouteUrl('checkout/credovaCapture'),
             'firstName' => $applicationInfo->getFirstName(),
             'lastName' => $applicationInfo->getLastName(),
-            'email' => $applicationInfo->getEmail(),
+            'email' => $email,
             'mobilePhone' => $phoneNumber->getNationalNumber(),
             'products' => []
         ];
@@ -77,7 +83,7 @@ class Application implements ApplicationInterface
         $shippingAddressInfo = $this->checkoutSession->getQuote()->getShippingAddress();
         $shippingAddressAmount = $shippingAddressInfo->getBaseShippingInclTax() - $shippingAddressInfo->getBaseShippingDiscountAmount();
 
-        if($shippingAddressAmount > 0) {
+        if ($shippingAddressAmount > 0) {
             $data['products'][] = [
                 'id' => 'shipping',
                 'description' => 'Shipping',
