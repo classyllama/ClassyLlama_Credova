@@ -52,7 +52,7 @@
         resolvePath(nodePath.get('source'), state);
     }
 
-    const importVisitors = {
+    var importVisitors = {
         CallExpression: transformCall,
         'ImportDeclaration|ExportDeclaration': transformImport
     };
@@ -78,7 +78,7 @@
                 this.moduleResolverVisited = {};
             },
 
-            visitor,
+            visitor: visitor,
 
             post: function () {
                 this.moduleResolverVisited = null;
