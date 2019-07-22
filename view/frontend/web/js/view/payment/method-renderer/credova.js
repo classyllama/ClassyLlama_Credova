@@ -2,6 +2,7 @@ import Component from 'Magento_Checkout/js/view/payment/default';
 import quote from 'Magento_Checkout/js/model/quote';
 import storage from 'mage/storage';
 import urlBuilder from 'Magento_Checkout/js/model/url-builder';
+import additionalValidators from 'Magento_Checkout/js/model/payment/additional-validators';
 import 'credovaPlugin'
 
 
@@ -64,42 +65,57 @@ export default Component.extend({
     },
 
     authorizeCredovaFinancing() {
-        const publicId = localStorage.getItem('credovaPublicId');
 
-        if (publicId !== null) {
-            this.publicId(publicId);
+        var self = this;
+
+        if (event) {
+            event.preventDefault();
         }
 
-        const billingAddress = quote.billingAddress();
+        if (this.validate() && additionalValidators.validate()) {
 
-        if (!checkPropertyValues(billingAddress, ['firstname', 'lastname', 'telephone'])) {
-            // TODO: Notifiy user they need valid billing address info
-            return;
-        }
+            const publicId = localStorage.getItem('credovaPublicId');
 
-        this.applicationRequestProcessing(true);
+            if (publicId !== null) {
+                this.publicId(publicId);
+            }
 
-        storage.post(
-            urlBuilder.createUrl('/credova/createApplication', {}),
-            JSON.stringify({
-                "applicationInfo": {
-                    "first_name": billingAddress.firstname,
-                    "last_name": billingAddress.lastname,
-                    "phone_number": billingAddress.telephone,
-                    "email": billingAddress.guestEmail,
-                    "public_id": this.publicId()
-                }
-            }),
-            false
-        ).done(publicId => {
-            if (!publicId) {
-                // TODO: Handle error
+            const billingAddress = quote.billingAddress();
+
+            if (!checkPropertyValues(billingAddress, ['firstname', 'lastname', 'telephone'])) {
+                // TODO: Notifiy user they need valid billing address info
                 return;
             }
 
-            this.publicId(publicId);
-            this.displayCredovaPopup();
-        }).fail(() => this.applicationRequestProcessing(false));
+            this.applicationRequestProcessing(true);
+
+            storage.post(
+                urlBuilder.createUrl('/credova/createApplication', {}),
+                JSON.stringify({
+                    "applicationInfo": {
+                        "first_name": billingAddress.firstname,
+                        "last_name": billingAddress.lastname,
+                        "phone_number": billingAddress.telephone,
+                        "email": billingAddress.guestEmail,
+                        "public_id": this.publicId()
+                    }
+                }),
+                false
+            ).done(publicId => {
+                if (!publicId) {
+                    // TODO: Handle error
+                    return;
+                }
+
+                this.publicId(publicId);
+                this.displayCredovaPopup();
+            }).fail(() => this.applicationRequestProcessing(false));
+        }else{
+            return false;
+        }
+
+
+
     },
 
     displayCredovaPopup() {
