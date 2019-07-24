@@ -1,15 +1,41 @@
-.credova-license-creation-form-wrapper {
+
+
+& when (@media-common = true) {
+  .credova-license-creation-form-wrapper {
     display: none;
 
     &.modal {
-        display: block;
+      display: block;
     }
 
     .create-field {
-        display: none;
+      display: none;
     }
 
     &.create .create-field {
-        display: block;
+      display: block;
     }
+  }
+
+
+
+
+  .credova-section .heading {
+    background: url("@{baseDir}images/fpx_logo.png");
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 20px 0 0px;
+    width: 180px;
+    height: 35px;
+    padding-left:20 rem;
+    background-size: contain;
+
+    background-repeat: no-repeat;
+  }
+
+  .credova-section .button-container {
+    float: right;
+  }
+
+
 }
