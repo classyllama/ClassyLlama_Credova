@@ -22,15 +22,11 @@ class PopulateFpx extends \Magento\Framework\View\Element\Template
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\RequestInterface $request,
         AssetRepository $assetRepository,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->customerSession = $customerSession;
-        $this->_objectManager = $objectManager;
         $this->assetRepository = $assetRepository;
         $this->request = $request;
     }
