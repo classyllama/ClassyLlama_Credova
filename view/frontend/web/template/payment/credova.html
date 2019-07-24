@@ -5,6 +5,7 @@
                class="radio"
                ko-checked="isChecked" ko-value="getCode()"
                attr="{'id': getCode()}, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <img data-bind="attr: {src: credovaLogo, alt: $t('Fpx MyClear'), height: '', width: '110' }" class="payment-icon"/>
         <label attr="for : getCode()" class="label"><span text="getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
