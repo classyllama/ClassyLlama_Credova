@@ -7,8 +7,12 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */ ?>
-<?php $_order = $block->getOrder() ?>
+<?php
+/** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */
+$_order = $block->getOrder();
+$payment = $_order->getPayment();
+$addition_info = $payment->getAdditionalInformation();
+?>
 
 <div id="order-messages">
     <?= $block->getChildHtml('order_messages') ?>
@@ -31,6 +35,7 @@
                 <div class="order-payment-method-title"><?= $block->getPaymentHtml() ?></div>
                 <div class="order-payment-currency"><?= /* @escapeNotVerified */ __('The order was placed using %1.', $_order->getOrderCurrencyCode()) ?></div>
                 <div class="order-payment-additional">
+                    <?= array_key_exists('credova_application_id',$addition_info) ? 'Credova application ID: ' . $addition_info['credova_application_id'] : ''  ?>
                     <?= $block->getChildHtml('order_payment_additional') ?>
                     <?= $block->getChildHtml('payment_additional_info') ?>
                 </div>
