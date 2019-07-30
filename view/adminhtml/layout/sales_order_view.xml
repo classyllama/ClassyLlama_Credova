@@ -56,34 +56,6 @@
                         <block class="Magento\Sales\Block\Adminhtml\Order\Totals\Tax" name="tax" template="Magento_Sales::order/totals/tax.phtml"/>
                     </block>
                 </block>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_info</argument>
-                    <argument name="block" xsi:type="string">order_tab_info</argument>
-                </action>
-                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Invoices" name="sales_order_invoice.grid.container"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_invoices</argument>
-                    <argument name="block" xsi:type="string">sales_order_invoice.grid.container</argument>
-                </action>
-                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos" name="sales_order_creditmemo.grid.container"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_creditmemos</argument>
-                    <argument name="block" xsi:type="string">sales_order_creditmemo.grid.container</argument>
-                </action>
-                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Shipments" name="sales_order_shipment.grid.container"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_shipments</argument>
-                    <argument name="block" xsi:type="string">sales_order_shipment.grid.container</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_history</argument>
-                    <argument name="block" xsi:type="string">Magento\Sales\Block\Adminhtml\Order\View\Tab\History</argument>
-                </action>
-                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions" name="sales_transactions.grid.container"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">order_transactions</argument>
-                    <argument name="block" xsi:type="string">sales_transactions.grid.container</argument>
-                </action>
             </block>
         </referenceContainer>
         <referenceContainer name="payment_additional_info">
