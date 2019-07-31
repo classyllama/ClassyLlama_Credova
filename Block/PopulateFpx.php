@@ -9,6 +9,7 @@ namespace ClassyLlama\Credova\Block;
 
 
 use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Tests\NamingConvention\true\string;
 
 class PopulateFpx extends \Magento\Framework\View\Element\Template
 {
@@ -31,15 +32,24 @@ class PopulateFpx extends \Magento\Framework\View\Element\Template
         $this->request = $request;
     }
 
-
-
-
+    /**
+     * Set the photo URL path
+     *
+     * @return string
+     */
     public function getFpxConfig()
     {
         $output['fpxLogoImageUrl'] = $this->getViewFileUrl('ClassyLlama_Credova::images/fpx_logo.png');
         return $output;
     }
 
+    /**
+     * A getter for static view file URL
+     *
+     * @param string $fileId
+     * @param array $params
+     * @return string
+     */
     public function getViewFileUrl($fileId, array $params = [])
     {
         $params = array_merge(['_secure' => $this->request->isSecure()], $params);
