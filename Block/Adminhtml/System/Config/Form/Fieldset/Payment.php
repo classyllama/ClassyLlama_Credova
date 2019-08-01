@@ -88,11 +88,11 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     $html .= '<div class="button-container"><button type="button"' .
         $disabledAttributeString .
         ' class="button action-configure' .
-        (empty($groupConfig['paypal_ec_separate']) ? '' : ' paypal-ec-separate') .
+        (empty($groupConfig['credova_ec_separate']) ? '' : ' credova-ec-separate') .
         $disabledClassString .
         '" id="' .
         $htmlId .
-        '-head" onclick="paypalToggleSolution.call(this, \'' .
+        '-head" onclick="credovaToggleSolution.call(this, \'' .
         $htmlId .
         "', '" .
         $this->getUrl(
