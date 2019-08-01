@@ -4,7 +4,7 @@
         <payment>
             <credova>
                 <active>0</active>
-                <title>Credova</title>
+                <title>Credova Financing</title>
                 <model>ClassyLlama\Credova\Model\Method\Credova</model>
                 <payment_action>authorize_capture</payment_action>
                 <logging_enabled>0</logging_enabled>
