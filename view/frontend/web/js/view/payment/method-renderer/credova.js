@@ -17,7 +17,7 @@ export default Component.extend({
         template: 'ClassyLlama_Credova/payment/credova',
         preQualificationId: null
     },
-
+    fpxImageSrc: window.populateFpx.fpxLogoImageUrl,
     initialize() {
         this._super();
 
