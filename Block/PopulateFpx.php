@@ -9,7 +9,6 @@ namespace ClassyLlama\Credova\Block;
 
 
 use Magento\Framework\View\Asset\Repository as AssetRepository;
-use Magento\Tests\NamingConvention\true\string;
 
 class PopulateFpx extends \Magento\Framework\View\Element\Template
 {
