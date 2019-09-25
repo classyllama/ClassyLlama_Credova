@@ -13,4 +13,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="credova" xsi:type="object">ClassyLlama\Credova\Model\CredovaPaymentConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
