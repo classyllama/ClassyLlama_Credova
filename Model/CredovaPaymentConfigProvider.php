@@ -95,7 +95,8 @@ class CredovaPaymentConfigProvider implements \Magento\Checkout\Model\ConfigProv
         return [
             'credova' => [
                 'store' => $this->credovaConfig->getCredovaStoreCode(),
-                'environment' => $this->credovaConfig->getCredovaEnvironment()
+                'environment' => $this->credovaConfig->getCredovaEnvironment(),
+                'minimumAmount' => $this->credovaConfig->getCredovaMinimumAmount()
             ]
         ];
     }

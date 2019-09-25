@@ -52,7 +52,7 @@ export default Component.extend({
 
     /** Returns is method available */
     isAvailable() {
-        return quote.totals()['grand_total'] >= 300;
+        return quote.totals()['grand_total'] >= window.checkoutConfig.credova.minimumAmount;
     },
 
     getData() {
