@@ -25,9 +25,10 @@ export default Component.extend({
         this.applicationRequestProcessing = false;
         this.observe(['publicId', 'applicationRequestProcessing']);
 
+        var environmentName = window.checkoutConfig.credova.environment;
         window.CRDV.plugin.config({
-            environment: window.CRDV.Environment.Sandbox,
-            store: "CLL000"
+            environment: window.CRDV.Environment[environmentName],
+            store: window.checkoutConfig.credova.store
         });
 
         window.CRDV.plugin.addEventListener(this.onCredovaEvent.bind(this));
@@ -51,7 +52,7 @@ export default Component.extend({
 
     /** Returns is method available */
     isAvailable() {
-        return quote.totals()['grand_total'] >= 300;
+        return quote.totals()['grand_total'] >= window.checkoutConfig.credova.minimumAmount;
     },
 
     getData() {
